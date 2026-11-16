@@ -85,6 +85,18 @@ def init_schema(conn) -> None:
           status TEXT NOT NULL,
           created_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS apply_lock (
+          id INTEGER PRIMARY KEY CHECK (id = 1),
+          holder TEXT NOT NULL DEFAULT '',
+          holder_kind TEXT NOT NULL DEFAULT '',
+          acquired_at TEXT NOT NULL DEFAULT '',
+          expires_at TEXT NOT NULL DEFAULT '',
+          acquired_epoch REAL NOT NULL DEFAULT 0,
+          expires_epoch REAL NOT NULL DEFAULT 0,
+          fence INTEGER NOT NULL DEFAULT 0,
+          released_at TEXT
+        );
+        INSERT OR IGNORE INTO apply_lock(id) VALUES (1);
         '''
     )
 

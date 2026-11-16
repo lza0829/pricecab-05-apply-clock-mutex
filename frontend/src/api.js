@@ -25,8 +25,19 @@ export const api = {
   clock: () => request('/api/apply/clock'),
   setClock: (business_clock) =>
     request('/api/apply/clock', { method: 'PUT', body: JSON.stringify({ business_clock }) }),
-  applyDue: () => request('/api/apply/due', { method: 'POST' }),
+  applyDue: (hold_ms) =>
+    request(`/api/apply/due${hold_ms ? `?hold_ms=${encodeURIComponent(hold_ms)}` : ''}`, { method: 'POST' }),
   batches: () => request('/api/apply/batches'),
+  applyLock: () => request('/api/apply/lock'),
+  recoverLock: () => request('/api/apply/lock/recover', { method: 'POST' }),
+  policy: () => request('/api/apply/policy'),
+  setPolicy: (policy, lock_timeout_seconds) =>
+    request('/api/apply/policy', {
+      method: 'PUT',
+      body: JSON.stringify({ policy, lock_timeout_seconds }),
+    }),
+  conflicts: () => request('/api/apply/conflicts'),
+  aborts: () => request('/api/apply/aborts'),
   priceBook: () => request('/api/prices/book'),
   history: (sku) => request(sku ? `/api/prices/history?sku_code=${encodeURIComponent(sku)}` : '/api/prices/history'),
   reconcile: () => request('/api/reconcile/sales'),
